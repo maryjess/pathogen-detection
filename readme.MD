@@ -1,4 +1,5 @@
-# CS4220 Pathogen Detection Project
+# Pathogen Detection Project
+## Part of Knowledge Discovery in Bioinformatics Module
 
 Group Anything
 
