@@ -99,4 +99,6 @@ if test_data is not None and st.button("Run Pathogen Prediction"):
             if not index == len(predictions_species_name) - 1:
                 file.write('\n')
 else:
-    raise FileNotFoundError("No data uploaded. Please provide a numpy file (.npy) to run the prediction.")
+    # raise FileNotFoundError("No data uploaded. Please provide a numpy file (.npy) to run the prediction.")
+    st.info("No data uploaded. Please provide a numpy file (.npy) to run the prediction.")
+    st.stop()
