@@ -77,15 +77,15 @@ if test_data is not None:
             y_pred[np.where(y_predprob.max(axis = 1) < RF_THRESHOLD)] = -1
             predictions = list(np.unique(y_pred))
 
-            # If there is a pathogen predicted, it is not a decoy dataset
-            if DECOY in predictions:
-                # Removing decoy
-                predictions.remove(DECOY)
-            if -1 in predictions:
-                # Removing unconfident predictions
-                predictions.remove(-1)
-        
-        st.success(f"Decoy prediction: {predictions}")
+        # If there is a pathogen predicted, it is not a decoy dataset
+        if DECOY in predictions:
+            # Removing decoy
+            st.warning("Decoy detected in the dataset. Removing decoy from predictions.")
+            predictions.remove(DECOY)
+        if -1 in predictions:
+            # Removing unconfident predictions
+            st.warning("Unconfident predictions detected. Removing unconfident predictions.")
+            predictions.remove(-1)
             
         predictions_species_name = list(map(lambda x:labels_df[x], predictions))
         st.success(f"Pathogen prediction: {predictions_species_name}")
