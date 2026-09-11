@@ -17,6 +17,9 @@ warnings.simplefilter(action='ignore')
 # if test_data == "Directory is empty":
 #     return FileNotFoundError("Path specified is a directory, not file. Select path to numpy file (.npy)")
 
+st.title("Pathogen Detection Project")
+st.write("A two-step approach used to detect pathogens (bacterial strains) from sample patient genomic data.")
+
 data_source = st.radio("Select data source", ("Upload your own test data", "Use example test data"), key = "data_source")
 
 if data_source == "Use example test data":
@@ -44,8 +47,6 @@ if test_data is not None and st.button("Run Pathogen Prediction"):
 
     decoy_rf, pathogen_rf = load_models()
 
-    st.title("Pathogen Detection Project")
-    st.write("A two-step approach used to detect pathogens (bacterial strains) from sample patient genomic data.")
 
     DECOY = 6
     RF_THRESHOLD = 0.63
