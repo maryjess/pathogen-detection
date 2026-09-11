@@ -20,6 +20,7 @@ warnings.simplefilter(action='ignore')
 
 st.title("Pathogen Detection Project")
 st.write("A two-step approach used to detect pathogens (bacterial strains) from sample patient genomic data.")
+st.write("Find source code and more details about the project at [GitHub](https://github.com/maryjess/pathogen-detection)")
 
 data_source = st.radio("Select data source", ("Upload your own test data", "Use example test data"), key = "data_source")
 
@@ -35,7 +36,7 @@ if test_data is not None:
     if st.button("Run Pathogen Prediction"):
         result_file_name = test_data.split(".")[0].split("_")[0]
         loaded_array = np.load(test_data)
-        st.write("Preview: ", loaded_array[:5])
+        # st.write("Preview: ", loaded_array[:5])
         
         # Labels to species conversion
         labels_to_species = pd.read_csv('labels_to_species.csv', index_col = 0)
