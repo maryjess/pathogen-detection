@@ -1,25 +1,48 @@
 # Pathogen Detection Project
 ## Knowledge Discovery in Bioinformatics
 
-Group Anything
+# Background
+
+Disease diagnosis is hard, but crucial. If we could diagnose infections (specifically those caused by bacteria in the scope of this project) early, it will lead to better treatment and improved quality of life.
+
+However, current diagnostic methods such as symptoms checking, blood tests, and imagery could be slow and inaccurate.
+
+# Approach
+
+DNA sequencing is fast and precise. If we could precisely identify reads from patients that are associated with pathogens, we could diagnose them quickly.
+
+In this approach, we represent the reads as **canonical k-mers** (substring of length k), where k = 6.
+
+Read more about canonical k-mers [here](https://bioinfologics.github.io/post/2018/09/17/k-mer-counting-part-i-introduction/).
+
+We used Random Forest model with a two-step approach:
+
+### **1. Decoy prediction model**
+
+Since we noticed that there are [a lot of decoys](assets/species.png) associated with the given training dataset, we trained a random forest model to predict for decoys with threshold of 0.85 (i.e. if less than 85% of the reads are classified as decoys, then the model will regard the dataset as decoy)
+
+### **2. Pathogen prediction model**
+
+For the next step, we applied a threshold of 500 unique 6-mers present, as there was [a number of outliers present](assets/unique-kmers.png) with very few unique 6-mers present, which could be indication of a very short read length.
+
+This second model is a multi-class random forest classifier that predicts the presence of pathogen(s).
+
+# Running the model
+
+### Input
+
+Takes in the canonical 6-mer profile of patient reads, in the format of Numpy (.npy). See sample test data [here](test_data/patient1_6mers.npy).
+
+### Output
+
+Outputs the list of pathogen(s) predicted.
+
+# Credits
+
+Thanks to my fellow groupmates in uni who has contributed to this project:
+
+### **Group Anything**
 
 - Chew Zhen Yuan
 - Eliza Soesanto
 - Jessica Mary Listijo
-
-# Instructions on how to run the model
-
-In this directory, there are several files:
-
-- `labels_to_species.csv`, containing the mapping of the labels to each pathogen species
-- `decoy_detection.joblib`, the first model to detect decoys
-- `pathogen_detection_rf.joblib`, the second model to predict pathogens
-- `final_two_step_approach.ipynb`, a Jupyter notebook containing a short code to run the model
-- `readme.MD` this readme file, contains guide to run the model
-
-See the steps below on how to run the model.
-
-1. Open the `final_two_step_approach.ipynb` file
-1. The third block is to configure the test data path. Currently it is set to be for `patient1_6mers.npy`, assuming that it is inside the `test_data` directory. The `test_data_path` at the third line could be changed to the path for the test data used. The format of the test data should be in the forms of NumPy array `.npy`. Make sure it leads to an `.npy` file, not a directory.
-1. The paths for the `labels_to_species.csv` file and the two models are already configured.
-1. The last block will print out the predicted species and output them as a CSV file as the result file. The output is named according to the test data provided, for instance `patient1.csv` if the test data is `patient1_6mers.npy`.
