@@ -1,5 +1,5 @@
 # Pathogen Detection Project
-## Part of Knowledge Discovery in Bioinformatics Module
+## Knowledge Discovery in Bioinformatics
 
 Group Anything
 
