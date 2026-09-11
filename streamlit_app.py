@@ -38,11 +38,11 @@ if test_data is not None and st.button("Run Pathogen Prediction"):
     
     @st.cache_resource
     def load_models():
-        decoy_detection = joblib.load("decoy_detection.joblib")
-        pathogen_detection = joblib.load("pathogen_detection_rf.joblib")
-        return decoy_detection, pathogen_detection
+        decoy_rf = joblib.load("decoy_detection.joblib")
+        pathogen_rf = joblib.load("pathogen_detection_rf.joblib")
+        return decoy_rf, pathogen_rf
 
-    decoy_detection, pathogen_detection = load_models()
+    decoy_rf, pathogen_rf = load_models()
 
     st.title("Pathogen Detection Project")
     st.write("A two-step approach used to detect pathogens (bacterial strains) from sample patient genomic data.")
@@ -61,10 +61,10 @@ if test_data is not None and st.button("Run Pathogen Prediction"):
 
     ### First model: detecting decoy
     y_pred_decoy = decoy_rf.predict(patient_df)
+
     # Filtering out decoys with threshold of 0.85
     if y_pred_decoy.sum() / len(y_pred_decoy) > DECOY_THRESHOLD:
         predictions = [DECOY]
-    st.success(f"Decoy prediction: {predictions}")
 
     else:
         ### Second model: predicting pathogens
@@ -82,17 +82,19 @@ if test_data is not None and st.button("Run Pathogen Prediction"):
         if -1 in predictions:
             # Removing unconfident predictions
             predictions.remove(-1)
+    
+    st.success(f"Decoy prediction: {predictions}")
         
-        predictions_species_name = list(map(lambda x:labels_df[x], predictions))
-        st.success(f"Pathogen prediction: {predictions_species_name}")
+    predictions_species_name = list(map(lambda x:labels_df[x], predictions))
+    st.success(f"Pathogen prediction: {predictions_species_name}")
 
-        # Write to CSV result file
-        with open(f"{result_file_name}.csv", "w") as file:
-            file.write("labels")
-            file.write('\n')
-            for index, species in enumerate(predictions_species_name):
-                file.write(species)
-                if not index == len(predictions_species_name) - 1:
-                    file.write('\n')
-
-    return FileNotFoundError("No data uploaded. Please provide a numpy file (.npy) to run the prediction.")
+    # Write to CSV result file
+    with open(f"{result_file_name}.csv", "w") as file:
+        file.write("labels")
+        file.write('\n')
+        for index, species in enumerate(predictions_species_name):
+            file.write(species)
+            if not index == len(predictions_species_name) - 1:
+                file.write('\n')
+else:
+    raise FileNotFoundError("No data uploaded. Please provide a numpy file (.npy) to run the prediction.")
